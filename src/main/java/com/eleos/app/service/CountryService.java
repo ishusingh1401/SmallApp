@@ -25,14 +25,15 @@ public class CountryService {
     public List<Country> listOfCountries(String range) {
         int startRange = 0;
         int endRange = 5;
-        Sort sort = Sort.by(Sort.Order.asc("name"));
+        Sort sort = Sort.by(Sort.Order.asc("countryName"));
         Pageable pageable = null;
+        String[] rangeArray = range.split("-");
         if (!range.isEmpty()) {
-            startRange = Integer.parseInt(range.split("-")[0]);
-            endRange = Integer.parseInt(range.split("-")[1]);
+            startRange = Integer.parseInt(rangeArray[0]);
+            endRange = Integer.parseInt(rangeArray[1]);
         }
         if (startRange < endRange) {
-            pageable = PageRequest.of((endRange / (endRange - startRange)) - 1, endRange - startRange , sort);
+            pageable = PageRequest.of((endRange / (endRange - startRange)) - 1, endRange - startRange, sort);
         }
         assert pageable != null;
         Page<Country> countryPageList = countryRepository.findAll(pageable);
@@ -49,7 +50,7 @@ public class CountryService {
         if (existingCountry.isPresent()) {
             Country country = existingCountry.get();
             country.setCountryName(updatedCountry.getCountryName());
-            return countryRepository.save(updatedCountry);
+            return countryRepository.save(country);
         } else {
             return null;
         }

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -34,8 +35,8 @@ public class CountryController {
      */
 
     @GetMapping
-    public ResponseEntity<List<Country>> listCountries(String range) {
-        List<Country> countries = countryService.listOfCountries(range);
+    public ResponseEntity<List<Country>> listCountries(@PathParam(value = "range") String range) {
+        List<Country> countries = countryService.listOfCountries(null == range ? "0-5" : range);
         return ResponseEntity.ok(countries);
     }
 
